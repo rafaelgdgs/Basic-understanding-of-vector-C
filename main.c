@@ -31,18 +31,24 @@ int increase_vector_size(vector* vect, int ammount) {
 
 int push_to_vector(vector* vect, int i) {
   if (!(vect->len < vect->cap)){
-    increase_vector_size(vect, 1);
+    int return_value = increase_vector_size(vect, 1);
+    if (return_value < 0) {return -1;}
   }
-  ((int*)vect->ptr)[sizeof(int)*vect->len] = i;
+  *( ((int*)vect->ptr) + sizeof(int)*vect->len ) = i;
   vect->len += 1;
   return 0;
+}
+
+int get_element_by_index(vector* vect, int index) {
+  return *( ((int*)vect->ptr) + sizeof(int)*index );
 }
 
 int main() {
   vector* vect = initialize_vector();
   push_to_vector(vect, 12);
   push_to_vector(vect, 15);
-  printf("%d - %d\n", ((int*)vect->ptr)[sizeof(int)*0], ((int*)vect->ptr)[sizeof(int)*1]);
+  printf("%d - %d\n", get_element_by_index(vect, 0), get_element_by_index(vect, 1));
   printf("LEN: %u CAP: %u\n", vect->len, vect->cap);
 
+  return 0;
 }
